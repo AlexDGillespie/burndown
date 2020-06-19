@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-import datetime
-import json
+import base64
+
 from matplotlib import pyplot as plt
-    
+
 def plot_sprint(sprint):
     # Sorting the dict of entries by key (i.e. date)
     keys_sorted_list = sorted([*sprint['daily_sp_remaining']], reverse=False)
@@ -45,21 +45,6 @@ def plot_sprint(sprint):
     # Saving the graph as plot.png
     plt.savefig('plot.png')
 
-def main():
-    # Handling datetime
-    today_date = datetime.date.today()
-    is_weekday = today_date.weekday() < 5
-    today = str(today_date)
-
-    # Loading sp_log.json
-    with open('sp_log.json', 'r') as f:
-        sp_log = json.loads(f.read())
-
-    # Running function to plot the current sprint if one exists
-    for sprint in sp_log:
-        if today <= sprint['end_date'] and today >= sprint['start_date']:
-            if is_weekday:
-                plot_sprint(sprint)
-
-if __name__ == '__main__':
-    main()
+def encode_64(file):
+    with open(file, 'rb') as f:
+        return base64.b64encode(f.read())
